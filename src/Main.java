@@ -21,12 +21,12 @@ public class Main {
 
                 } else if (command == 4) {
                     if (monthlyReport.isDataLoaded()) {
-                        for (Integer month : monthlyReport.getMothes()) {
+                        for (Integer month : monthlyReport.getMoths()) {
                             System.out.println(Service.getMonthNameByNumber(month) + ":");
-                            ProductInfo mostProfitable = monthlyReport.getMostProfitableByMonth(month);
+                            ProductInfo mostProfitable = monthlyReport.getMostProfOrExpenseByMonth(month, false);
                             System.out.println("Самый прибыльный товар: \"" +
                                     mostProfitable.item_name + "\", цена " + mostProfitable.sum);
-                            ProductInfo biggestExpense = monthlyReport.getBiggestExpenseByMonth(month);
+                            ProductInfo biggestExpense = monthlyReport.getMostProfOrExpenseByMonth(month, true);
                             System.out.println("Самуя большая трата: \"" +
                                     biggestExpense.item_name + "\", цена " + biggestExpense.sum);
                             System.out.println();

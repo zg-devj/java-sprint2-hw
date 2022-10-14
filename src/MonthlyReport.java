@@ -17,42 +17,24 @@ public class MonthlyReport {
     }
 
     // Возврат месяцев
-    public ArrayList<Integer> getMothes() {
+    public ArrayList<Integer> getMoths() {
         ArrayList<Integer> months = new ArrayList<>();
         months.addAll(listMonthly.keySet());
         return months;
     }
 
-    // Самый прибыльный товар
-    public ProductInfo getMostProfitableByMonth(int month) {
+    // вывод самый прибыльный товар или Самую большую трату
+    public ProductInfo getMostProfOrExpenseByMonth(int month,boolean is_expense) {
         ArrayList<MonthlyData> list = listMonthly.get(month);
         ProductInfo productInfo = new ProductInfo();
         int maxSum = 0;
         for (MonthlyData data : list) {
-            if (!data.is_expense) {
+            if (data.is_expense == is_expense) {
                 int totalSum = data.totalSum();
                 if (totalSum > maxSum) {
                     maxSum = totalSum;
                     productInfo.item_name = data.item_name;
                     productInfo.sum = data.sum_of_one;
-                }
-            }
-        }
-        return productInfo;
-    }
-
-    // Самуя большая трата
-    public ProductInfo getBiggestExpenseByMonth(int month) {
-        ArrayList<MonthlyData> list = listMonthly.get(month);
-        ProductInfo productInfo = new ProductInfo();
-        int maxSum = 0;
-        for (MonthlyData data : list) {
-            if(data.is_expense) {
-                int totalSum = data.totalSum();
-                if (totalSum > maxSum) {
-                    maxSum = totalSum;
-                    productInfo.item_name = data.item_name;
-                    productInfo.sum = totalSum;
                 }
             }
         }
@@ -66,13 +48,13 @@ public class MonthlyReport {
             return;
         }
 
-        for (int i = 1; i <= 3; i++) {
-            String fileContents = ServiceData.readFileContentsOrNull("resources/m.20210" + i + ".csv");
+        for (int month = 1; month <= 3; month++) {
+            String fileContents = ServiceData.readFileContentsOrNull("resources/m.20210" + month + ".csv");
             String[] lines = fileContents.split(System.lineSeparator());
 
             ArrayList<MonthlyData> dataList = new ArrayList<>();
             MonthlyData data;
-            int month = i;
+            //int month = i;
 
             for (int j = 1; j < lines.length; j++) {
                 String[] lineContents = lines[j].split(",");
