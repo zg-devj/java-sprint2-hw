@@ -16,6 +16,49 @@ public class MonthlyReport {
         listMonthly = new HashMap<>();
     }
 
+    // Возврат месяцев
+    public ArrayList<Integer> getMothes() {
+        ArrayList<Integer> months = new ArrayList<>();
+        months.addAll(listMonthly.keySet());
+        return months;
+    }
+
+    // Самый прибыльный товар
+    public ProductInfo getMostProfitableByMonth(int month) {
+        ArrayList<MonthlyData> list = listMonthly.get(month);
+        ProductInfo productInfo = new ProductInfo();
+        int maxSum = 0;
+        for (MonthlyData data : list) {
+            if (!data.is_expense) {
+                int totalSum = data.totalSum();
+                if (totalSum > maxSum) {
+                    maxSum = totalSum;
+                    productInfo.item_name = data.item_name;
+                    productInfo.sum = data.sum_of_one;
+                }
+            }
+        }
+        return productInfo;
+    }
+
+    // Самуя большая трата
+    public ProductInfo getBiggestExpenseByMonth(int month) {
+        ArrayList<MonthlyData> list = listMonthly.get(month);
+        ProductInfo productInfo = new ProductInfo();
+        int maxSum = 0;
+        for (MonthlyData data : list) {
+            if(data.is_expense) {
+                int totalSum = data.totalSum();
+                if (totalSum > maxSum) {
+                    maxSum = totalSum;
+                    productInfo.item_name = data.item_name;
+                    productInfo.sum = totalSum;
+                }
+            }
+        }
+        return productInfo;
+    }
+
     // загрузка отчета из файла
     public void loadData() {
         if (isDataLoaded) {
