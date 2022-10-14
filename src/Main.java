@@ -6,8 +6,8 @@ public class Main {
     public static void main(String[] args) {
         MonthlyReport monthlyReport = new MonthlyReport();
         YearlyReport yearlyReport = new YearlyReport();
-
         Scanner scanner = new Scanner(System.in);
+
         while (true) {
             printMenu();
             if (scanner.hasNextInt()) {
@@ -55,17 +55,16 @@ public class Main {
                         System.out.println("Год " + yearlyReport.getReportYear());
                         System.out.println("Прибыль по каждому месяцу:");
                         for (Map.Entry<Integer, Integer> profit : yearlyReport.getAllProfits().entrySet()) {
-                            System.out.println(
-                                    String.format("\t%s %d",
-                                            Service.getMonthNameByNumber(profit.getKey()),
-                                            profit.getValue()));
+                            System.out.printf("\t%s %d%n",
+                                    Service.getMonthNameByNumber(profit.getKey()),
+                                    profit.getValue());
                         }
-                        System.out.println(String.format(
-                                "Средний расход за все месяцы в году: %.2f",
-                                yearlyReport.getAverage(true)));
-                        System.out.println(String.format(
-                                "Средний доход за все месяцы в году: %.2f",
-                                yearlyReport.getAverage(false)));
+                        System.out.printf(
+                                "Средний расход за все месяцы в году: %.2f%n",
+                                yearlyReport.getAverage(true));
+                        System.out.printf(
+                                "Средний доход за все месяцы в году: %.2f%n",
+                                yearlyReport.getAverage(false));
                         System.out.println();
                     } else {
                         System.out.println("Вы не считали годовой отчет!");

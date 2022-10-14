@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MonthlyReport {
     HashMap<Integer, ArrayList<MonthlyData>> listMonthly;
@@ -86,16 +85,6 @@ public class MonthlyReport {
         isDataLoaded = true;
     }
 
-    // TODO: delete this
-    private void printList() {
-        for (Map.Entry<Integer, ArrayList<MonthlyData>> item : listMonthly.entrySet()) {
-            System.out.println(item.getKey() + ":");
-            for (MonthlyData data : item.getValue()) {
-                System.out.println(data);
-            }
-        }
-    }
-
     class MonthlyData {
         // название товара
         String item_name;
@@ -113,14 +102,9 @@ public class MonthlyReport {
             this.sum_of_one = sum_of_one;
         }
 
+        // сумма всех товаров
         public int totalSum() {
             return quantity * sum_of_one;
-        }
-
-        // TODO: delete this
-        @Override
-        public String toString() {
-            return item_name + " : " + is_expense + " : " + quantity + " : " + sum_of_one;
         }
     }
 }

@@ -12,6 +12,7 @@ public class YearlyReport {
     public int getReportYear() {
         return year;
     }
+
     public boolean isDataLoaded() {
         return isDataLoaded;
     }
@@ -25,9 +26,9 @@ public class YearlyReport {
         int sum = 0;
         double count = 0;
         for (ArrayList<YearlyData> values : listYearly.values()) {
-            for (int i = 0; i < values.size(); i++) {
-                if (values.get(i).is_expense == is_expense) {
-                    sum += values.get(i).amount;
+            for (YearlyData value : values) {
+                if (value.is_expense == is_expense) {
+                    sum += value.amount;
                     count++;
                 }
             }
@@ -55,12 +56,12 @@ public class YearlyReport {
     }
 
     // Возвращаем список не прошедших сверку месяцев
-    public ArrayList<Integer> getNotNorthernMonths(MonthlyReport report){
+    public ArrayList<Integer> getNotNorthernMonths(MonthlyReport report) {
         ArrayList<Integer> result = new ArrayList<>();
-        for(Integer month : listYearly.keySet()) {
-            for(YearlyData data : listYearly.get(month)){
-                if(data.amount != report.getSumForMonth(month,data.is_expense)){
-                    if(!result.contains(month)) result.add(month);
+        for (Integer month : listYearly.keySet()) {
+            for (YearlyData data : listYearly.get(month)) {
+                if (data.amount != report.getSumForMonth(month, data.is_expense)) {
+                    if (!result.contains(month)) result.add(month);
                 }
             }
         }
@@ -100,16 +101,6 @@ public class YearlyReport {
         isDataLoaded = true;
     }
 
-    //TODO: delete this
-    public void printList() {
-        for (Integer key : listYearly.keySet()) {
-            System.out.println("key =  " + key);
-            for (YearlyData data : listYearly.get(key)) {
-                System.out.println(data);
-            }
-        }
-    }
-
     class YearlyData {
         // сумма
         int amount;
@@ -121,10 +112,5 @@ public class YearlyReport {
             this.is_expense = is_expense;
         }
 
-        //TODO: delete this
-        @Override
-        public String toString() {
-            return amount + " : " + is_expense;
-        }
     }
 }
