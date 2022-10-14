@@ -54,6 +54,19 @@ public class YearlyReport {
         return profit;
     }
 
+    // Возвращаем список не прошедших сверку месяцев
+    public ArrayList<Integer> getNotNorthernMonths(MonthlyReport report){
+        ArrayList<Integer> result = new ArrayList<>();
+        for(Integer month : listYearly.keySet()) {
+            for(YearlyData data : listYearly.get(month)){
+                if(data.amount != report.getSumForMonth(month,data.is_expense)){
+                    if(!result.contains(month)) result.add(month);
+                }
+            }
+        }
+        return result;
+    }
+
     // загрузка отчета из файла
     public void loadData(short year) {
         if (isDataLoaded) {

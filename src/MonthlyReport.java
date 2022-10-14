@@ -23,8 +23,21 @@ public class MonthlyReport {
         return months;
     }
 
-    // вывод самый прибыльный товар или Самую большую трату
-    public ProductInfo getMostProfOrExpenseByMonth(int month,boolean is_expense) {
+
+    // Возвращает сумму по месяцу и расходу или доходу
+    public int getSumForMonth(int month, boolean is_expense) {
+        ArrayList<MonthlyData> data = listMonthly.get(month);
+        int sum = 0;
+        for (MonthlyData item : data) {
+            if (item.is_expense == is_expense) {
+                sum += item.totalSum();
+            }
+        }
+        return sum;
+    }
+
+    // Вывод самый прибыльный товар или Самую большую трату
+    public ProductInfo getMostProfOrExpenseByMonth(int month, boolean is_expense) {
         ArrayList<MonthlyData> list = listMonthly.get(month);
         ProductInfo productInfo = new ProductInfo();
         int maxSum = 0;
@@ -40,6 +53,7 @@ public class MonthlyReport {
         }
         return productInfo;
     }
+
 
     // загрузка отчета из файла
     public void loadData() {

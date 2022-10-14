@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,7 +19,20 @@ public class Main {
                     // Считать годовой отчёт
                     yearlyReport.loadData((short) 2021);
                 } else if (command == 3) {
-
+                    // Сверить отчёты
+                    if (monthlyReport.isDataLoaded() && yearlyReport.isDataLoaded()) {
+                        ArrayList<Integer> months = yearlyReport.getNotNorthernMonths(monthlyReport);
+                        if (months.size() > 0) {
+                            System.out.println("Обнаружено несоответствие:");
+                            for (Integer month : months) {
+                                System.out.println(Service.getMonthNameByNumber(month));
+                            }
+                        } else {
+                            System.out.println("Операция успешна завершина.");
+                        }
+                    } else {
+                        System.out.println("Вы не считали месячные и годовой отчеты!");
+                    }
                 } else if (command == 4) {
                     if (monthlyReport.isDataLoaded()) {
                         for (Integer month : monthlyReport.getMoths()) {
