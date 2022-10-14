@@ -3,21 +3,21 @@ import java.util.HashMap;
 
 public class YearlyReport {
     HashMap<Integer, ArrayList<YearlyData>> listYearly;
+
+    // Загружен ли отчет
     private boolean isDataLoaded = false;
     private int year;
-
-    public YearlyReport() {
-        listYearly = new HashMap<>();
-    }
 
     // Вернуть год отчета
     public int getReportYear() {
         return year;
     }
-
-    // Загружен ли отчет
     public boolean isDataLoaded() {
         return isDataLoaded;
+    }
+
+    public YearlyReport() {
+        listYearly = new HashMap<>();
     }
 
     // средний расход или расход за все месяцы
@@ -98,7 +98,9 @@ public class YearlyReport {
     }
 
     class YearlyData {
+        // сумма
         int amount;
+        // является ли запись тратой
         boolean is_expense;
 
         public YearlyData(int amount, boolean is_expense) {
