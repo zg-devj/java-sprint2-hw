@@ -20,7 +20,20 @@ public class Main {
                 } else if (command == 3) {
 
                 } else if (command == 4) {
-
+                    if (monthlyReport.isDataLoaded()) {
+                        for (Integer month : monthlyReport.getMothes()) {
+                            System.out.println(Service.getMonthNameByNumber(month) + ":");
+                            ProductInfo mostProfitable = monthlyReport.getMostProfitableByMonth(month);
+                            System.out.println("Самый прибыльный товар: \"" +
+                                    mostProfitable.item_name + "\", цена " + mostProfitable.sum);
+                            ProductInfo biggestExpense = monthlyReport.getBiggestExpenseByMonth(month);
+                            System.out.println("Самуя большая трата: \"" +
+                                    biggestExpense.item_name + "\", цена " + biggestExpense.sum);
+                            System.out.println();
+                        }
+                    } else {
+                        System.out.println("Вы не считали месячные отчеты!");
+                    }
                 } else if (command == 5) {
                     // Вывести информацию о годовом отчёте
                     if (yearlyReport.isDataLoaded()) {
@@ -39,6 +52,7 @@ public class Main {
                         System.out.println(String.format(
                                 "Средний доход за все месяцы в году: %.2f",
                                 yearlyReport.getAverage(false)));
+                        System.out.println();
                     } else {
                         System.out.println("Вы не считали годовой отчет!");
                     }
