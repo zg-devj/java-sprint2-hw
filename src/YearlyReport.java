@@ -22,12 +22,12 @@ public class YearlyReport {
     }
 
     // средний расход или расход за все месяцы
-    public double getAverage(boolean is_expense) {
+    public double getAverage(boolean isExpense) {
         int sum = 0;
         double count = 0;
         for (ArrayList<YearlyData> values : listYearly.values()) {
             for (YearlyData value : values) {
-                if (value.is_expense == is_expense) {
+                if (value.isExpense == isExpense) {
                     sum += value.amount;
                     count++;
                 }
@@ -43,7 +43,7 @@ public class YearlyReport {
             int expense = 0;
             int income = 0;
             for (YearlyData data : listYearly.get(month)) {
-                if (data.is_expense) {
+                if (data.isExpense) {
                     expense = data.amount;
                 } else {
                     income = data.amount;
@@ -60,8 +60,14 @@ public class YearlyReport {
         ArrayList<Integer> result = new ArrayList<>();
         for (Integer month : listYearly.keySet()) {
             for (YearlyData data : listYearly.get(month)) {
-                if (data.amount != report.getSumForMonth(month, data.is_expense)) {
-                    if (!result.contains(month)) result.add(month);
+                // проверка на приход и расход есть, проверил,
+                // для тестирования изменить в одном месяце доход, в другом расход
+                // нижняя строка для проверки
+                // System.out.println(data.amount + " :: " + report.getSumForMonth(month, data.isExpense));
+                if (data.amount != report.getSumForMonth(month, data.isExpense)) {
+                    if (!result.contains(month)) {
+                        result.add(month);
+                    }
                 }
             }
         }
@@ -70,10 +76,12 @@ public class YearlyReport {
 
     // загрузка отчета из файла
     public void loadData(short year) {
+
         if (isDataLoaded) {
-            System.out.println("Данные годового отчета были считаны ранее.");
-            return;
+            listYearly.clear();
+            System.out.println("Данные годового отчета считаны повторно.");
         }
+
         this.year = year;
         String fileContents = ServiceData.readFileContentsOrNull("resources/y." + year + ".csv");
         String[] lines = fileContents.split(System.lineSeparator());
@@ -86,10 +94,10 @@ public class YearlyReport {
 
             int month = Integer.parseInt(lineContents[0]);
             int amount = Integer.parseInt(lineContents[1]);
-            boolean is_expense = Boolean.parseBoolean(lineContents[2]);
+            boolean isExpense = Boolean.parseBoolean(lineContents[2]);
 
             dataList = new ArrayList<>();
-            data = new YearlyData(amount, is_expense);
+            data = new YearlyData(amount, isExpense);
             if (listYearly.containsKey(month)) {
                 dataList = listYearly.get(month);
                 dataList.add(data);
@@ -105,12 +113,11 @@ public class YearlyReport {
         // сумма
         int amount;
         // является ли запись тратой
-        boolean is_expense;
+        boolean isExpense;
 
-        public YearlyData(int amount, boolean is_expense) {
+        public YearlyData(int amount, boolean isExpense) {
             this.amount = amount;
-            this.is_expense = is_expense;
+            this.isExpense = isExpense;
         }
-
     }
 }

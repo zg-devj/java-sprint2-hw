@@ -16,19 +16,20 @@ public class MonthlyReport {
     }
 
     // Возврат месяцев
-    public ArrayList<Integer> getMoths() {
+    public ArrayList<Integer> getMonths() {
         ArrayList<Integer> months = new ArrayList<>();
         months.addAll(listMonthly.keySet());
         return months;
     }
 
 
-    // Возвращает сумму по месяцу и расходу или доходу
-    public int getSumForMonth(int month, boolean is_expense) {
+    // Возвращает сумму по месяцу
+    // с учетом  расхода или дохода
+    public int getSumForMonth(int month, boolean isExpense) {
         ArrayList<MonthlyData> data = listMonthly.get(month);
         int sum = 0;
         for (MonthlyData item : data) {
-            if (item.is_expense == is_expense) {
+            if (item.isExpense == isExpense) {
                 sum += item.totalSum();
             }
         }
@@ -36,17 +37,17 @@ public class MonthlyReport {
     }
 
     // Вывод самый прибыльный товар или Самую большую трату
-    public ProductInfo getMostProfOrExpenseByMonth(int month, boolean is_expense) {
+    public ProductInfo getMostProfOrExpenseByMonth(int month, boolean isExpense) {
         ArrayList<MonthlyData> list = listMonthly.get(month);
         ProductInfo productInfo = new ProductInfo();
         int maxSum = 0;
         for (MonthlyData data : list) {
-            if (data.is_expense == is_expense) {
+            if (data.isExpense == isExpense) {
                 int totalSum = data.totalSum();
                 if (totalSum > maxSum) {
                     maxSum = totalSum;
-                    productInfo.item_name = data.item_name;
-                    productInfo.sum = data.sum_of_one;
+                    productInfo.itemName = data.itemName;
+                    productInfo.sum = data.sumOfOne;
                 }
             }
         }
@@ -55,29 +56,32 @@ public class MonthlyReport {
 
 
     // загрузка отчета из файла
-    public void loadData() {
+    public void loadData(short year) {
+
         if (isDataLoaded) {
-            System.out.println("Данные месячных отчетов были считаны ранее.");
-            return;
+            listMonthly.clear();
+            System.out.println("Данные месячных отчетов считаны повторно.");
         }
 
         for (int month = 1; month <= 3; month++) {
-            String fileContents = ServiceData.readFileContentsOrNull("resources/m.20210" + month + ".csv");
+            String monthString = Service.getTwoDigitMonthByNumber(month);
+            String path = "resources/m."+ year + monthString + ".csv";
+
+            String fileContents = ServiceData.readFileContentsOrNull(path);
             String[] lines = fileContents.split(System.lineSeparator());
 
             ArrayList<MonthlyData> dataList = new ArrayList<>();
             MonthlyData data;
-            //int month = i;
 
             for (int j = 1; j < lines.length; j++) {
                 String[] lineContents = lines[j].split(",");
 
-                String item_name = lineContents[0];
-                boolean is_expense = Boolean.parseBoolean(lineContents[1]);
+                String itemName = lineContents[0];
+                boolean isExpense = Boolean.parseBoolean(lineContents[1]);
                 int quantity = Integer.parseInt(lineContents[2]);
-                int sum_of_one = Integer.parseInt(lineContents[3]);
+                int sumOfOne = Integer.parseInt(lineContents[3]);
 
-                data = new MonthlyData(item_name, is_expense, quantity, sum_of_one);
+                data = new MonthlyData(itemName, isExpense, quantity, sumOfOne);
                 dataList.add(data);
             }
             listMonthly.put(month, dataList);
@@ -87,24 +91,24 @@ public class MonthlyReport {
 
     class MonthlyData {
         // название товара
-        String item_name;
+        String itemName;
         // является ли запись тратой
-        boolean is_expense;
+        boolean isExpense;
         // количество закупленного или проданного товара
         int quantity;
         // стоимость одной единицы товара
-        int sum_of_one;
+        int sumOfOne;
 
-        public MonthlyData(String item_name, boolean is_expense, int quantity, int sum_of_one) {
-            this.item_name = item_name;
-            this.is_expense = is_expense;
+        public MonthlyData(String itemName, boolean isExpense, int quantity, int sumOfOne) {
+            this.itemName = itemName;
+            this.isExpense = isExpense;
             this.quantity = quantity;
-            this.sum_of_one = sum_of_one;
+            this.sumOfOne = sumOfOne;
         }
 
         // сумма всех товаров
         public int totalSum() {
-            return quantity * sum_of_one;
+            return quantity * sumOfOne;
         }
     }
 }
